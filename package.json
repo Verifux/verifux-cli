@@ -1,6 +1,6 @@
 {
   "name": "@verifux/cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Run a free Verifux UX & AI-readiness snapshot from the terminal. Zero dependencies.",
   "type": "commonjs",
   "keywords": [

@@ -55,9 +55,15 @@ Examples:
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Identifies this client to the API so a CLI run is distinguishable from a web
+// or MCP run in the dashboard (Verifux usage tagging). The server maps the
+// `verifux-cli/` prefix to source 'cli'; an older client that predates this
+// just reads as 'unknown' rather than breaking.
+const UA = `verifux-cli/${VERSION}`;
+
 async function runSnapshot(apiBase, url) {
   const start = await fetch(`${apiBase}/api/snapshot`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }),
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'User-Agent': UA }, body: JSON.stringify({ url }),
   });
   const startJson = await start.json().catch(() => ({}));
   if (!start.ok || !startJson.jobId) {
@@ -68,7 +74,7 @@ async function runSnapshot(apiBase, url) {
   while (Date.now() < deadline) {
     await sleep(2500);
     let j = {};
-    try { j = await (await fetch(`${apiBase}/api/snapshot/${jobId}/status`)).json(); } catch { continue; }
+    try { j = await (await fetch(`${apiBase}/api/snapshot/${jobId}/status`, { headers: { 'User-Agent': UA } })).json(); } catch { continue; }
     if (j.status === 'error') throw new Error(`Snapshot could not complete: ${j.message || j.code || 'unknown error'}`);
     if (j.status === 'done') return j.snapshot;
   }
