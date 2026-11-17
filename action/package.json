@@ -1,0 +1,8 @@
+{
+  "name": "verifux-action",
+  "version": "1.0.0",
+  "description": "GitHub Action that runs a free Verifux UX & AI-readiness snapshot in CI.",
+  "type": "commonjs",
+  "private": false,
+  "license": "MIT"
+}

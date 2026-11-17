@@ -1,0 +1,51 @@
+name: 'Verifux UX & AI-Readiness Audit'
+description: 'Run a free Verifux snapshot on a URL in CI: UX, conversion and AI-agent readiness, with a PR comment and an optional score gate.'
+author: 'Verifux'
+branding:
+  icon: 'check-circle'
+  color: 'red'
+
+inputs:
+  url:
+    description: 'The URL to audit (any publicly reachable page).'
+    required: true
+  api-url:
+    description: 'Verifux API base URL. Only change this to point at a staging backend.'
+    required: false
+    default: 'https://api.verifux.app'
+  min-band:
+    description: 'Fail the job when the result band is below this. One of: none, poor, weak, mixed, strong. Band order is Poor < Weak < Mixed < Strong. "none" never fails the build.'
+    required: false
+    default: 'none'
+  comment:
+    description: 'Post (or update) a comment with the result on the pull request. true or false.'
+    required: false
+    default: 'true'
+  github-token:
+    description: 'Token used to post the PR comment. Defaults to the workflow token.'
+    required: false
+    default: ${{ github.token }}
+  timeout-seconds:
+    description: 'How long to wait for the snapshot to finish before failing.'
+    required: false
+    default: '150'
+
+outputs:
+  band:
+    description: 'Result band: Strong, Mixed, Weak, Poor, or unknown.'
+  checks-passed:
+    description: 'Number of automated checks that passed.'
+  checks-run:
+    description: 'Number of automated checks that ran.'
+  critical-count:
+    description: 'Number of critical findings.'
+  major-count:
+    description: 'Number of major findings.'
+  minor-count:
+    description: 'Number of minor findings.'
+  result-url:
+    description: 'Link to run the full audit on verifux.app.'
+
+runs:
+  using: 'node20'
+  main: 'index.js'
