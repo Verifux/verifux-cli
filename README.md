@@ -93,13 +93,31 @@ jobs:
 
 ---
 
+## Run, fix, re-run
+
+Each run is saved per URL under `~/.verifux/runs`. Run it again on the same URL
+after a change and it shows you what moved since last time:
+
+```
+  Since your last run of this URL (2026-11-16):
+    band Mixed -> Strong
+    now passing: Accessible names, Viewport
+```
+
+It compares two real measurements of the same URL and reports which named checks
+flipped. It does not claim your change caused it, and an unchanged page honestly
+reads `no change` rather than inventing movement. That makes it a loop a coding
+agent can drive: run, read what failed, fix, re-run, see it land. Use
+`--no-compare` to turn the local state off.
+
 ## Options
 
 | Option | What it does |
 | --- | --- |
 | `--ci` | Exit non-zero when the band is below `--min-band` |
 | `--min-band <band>` | `poor` · `weak` · `mixed` · `strong`. Default `weak` |
-| `--json` | Print the raw snapshot JSON instead of the report |
+| `--json` | Print the raw snapshot JSON instead of the report (includes `remeasure`) |
+| `--no-compare` | Do not read or write the local last-run state |
 | `--api-url <url>` | Point at a different backend. Default `https://api.verifux.app` |
 | `-h, --help` | Show help |
 | `-v, --version` | Show the version |
